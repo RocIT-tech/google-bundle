@@ -1,0 +1,25 @@
+{
+    "type": "symfony-bundle",
+    "name": "roc-it/google-map-bundle",
+    "description": "Provide Twig functions for google.",
+    "license": "proprietary",
+    "require": {
+        "php": "^7.3",
+        "league/uri": "^5.3",
+        "symfony/config": "^4.3",
+        "symfony/dependency-injection": "^4.3",
+        "symfony/http-kernel": "^4.3",
+        "twig/extensions": "^1.5"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "RocIT\\GoogleMapBundle\\": "src/"
+        }
+    }
+}
