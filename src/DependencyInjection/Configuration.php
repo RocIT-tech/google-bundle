@@ -21,6 +21,10 @@ class Configuration implements ConfigurationInterface
                         ->cannotBeEmpty()
                         ->info('Google map Api key')
                     ->end()
+                    ->arrayNode('default_options')
+                        ->prototype('variable')
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;

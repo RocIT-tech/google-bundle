@@ -27,6 +27,7 @@ class GoogleMapExtension extends Extension
         $container
             ->getDefinition(GoogleExtension::class)
             ->setArgument('$googleApiKey', $config['api_key'])
+            ->setArgument('$defaultOptions', true === empty($config['default_options']) ? null : $config['default_options'])
         ;
     }
 }

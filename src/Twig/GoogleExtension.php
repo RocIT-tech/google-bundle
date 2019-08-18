@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RocIT\GoogleMapBundle\Twig;
 
 use League\Uri\Uri;
+use League\Uri\UriInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use function array_keys;
@@ -26,13 +27,22 @@ class GoogleExtension extends AbstractExtension
     private $googleApiKey;
 
     /**
+     * @var array|null
+     */
+    private $defaultOptions;
+
+    /**
      * GoogleExtension constructor.
      *
-     * @param string $googleApiKey
+     * @param string     $googleApiKey
+     * @param array|null $defaultOptions
      */
-    public function __construct(string $googleApiKey)
-    {
-        $this->googleApiKey = $googleApiKey;
+    public function __construct(
+        string $googleApiKey,
+        ?array $defaultOptions = null
+    ) {
+        $this->googleApiKey   = $googleApiKey;
+        $this->defaultOptions = $defaultOptions;
     }
 
     /**
@@ -59,7 +69,7 @@ class GoogleExtension extends AbstractExtension
     ): string {
         static $baseUrl = 'https://maps.googleapis.com/maps/api/staticmap';
 
-        $defaultOptions = [
+        $defaultOptions = $this->defaultOptions ?: [
             'maptype' => 'roadmap',
             'size'    => '512x176',
         ];
@@ -100,18 +110,9 @@ class GoogleExtension extends AbstractExtension
 
         $url = merge_query(Uri::createFromString($baseUrl), build_query($options));
 
-        $url = array_reduce($markers, static function (Uri $url, string $markerConfiguration) {
+        $url = array_reduce($markers, static function (Uri $url, string $markerConfiguration): UriInterface {
             return append_query($url, "markers=${markerConfiguration}");
         }, $url);
-
-        //        $url = merge_query(Uri::createFromString($baseUrl), build_query([
-        //            'center'  => urlencode($center),
-        //            'maptype' => 'roadmap',
-        //            'key'     => $this->googleApiKey,
-        //            'size'    => '512x176',
-        //            'markers' => urlencode("color:red|size:tiny|${center}")
-        //            // zoom=13&size=600x300
-        //        ]));
 
         return (string) $url;
     }
